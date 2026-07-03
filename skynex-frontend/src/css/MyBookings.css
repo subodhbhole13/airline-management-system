@@ -1,0 +1,226 @@
+.bookings-page {
+  min-height: 100vh;
+  background: var(--bg);
+}
+
+.bookings-container {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+.bookings-header {
+  margin-bottom: 2rem;
+}
+
+.bookings-header h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+
+.bookings-header p {
+  color: var(--text2);
+  font-size: 0.88rem;
+  margin-top: 4px;
+}
+
+.bookings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.booking-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+}
+
+.booking-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.25rem;
+  gap: 1rem;
+}
+
+.booking-ref small {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 3px;
+}
+
+.booking-ref strong {
+  font-size: 1rem;
+  font-weight: 700;
+  font-family: monospace;
+  color: var(--gold);
+  letter-spacing: 0.04em;
+}
+
+.status-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.status-green { background: rgba(34,197,94,0.12); color: var(--green); }
+.status-red   { background: rgba(239,68,68,0.12);  color: var(--red); }
+.status-yellow{ background: rgba(234,179,8,0.12);  color: var(--yellow); }
+
+.booking-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+/* route visual */
+.booking-route {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 1rem;
+  background: var(--bg3);
+  border-radius: var(--radius);
+}
+
+.booking-city {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.booking-city strong {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.booking-city span {
+  font-size: 0.8rem;
+  color: var(--text2);
+}
+
+.booking-city.right {
+  align-items: flex-end;
+}
+
+.booking-arrow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  gap: 3px;
+  color: var(--gold);
+}
+
+.arrow-line {
+  display: block;
+  width: 100%;
+  height: 1px;
+  background: var(--border);
+}
+
+/* details grid */
+.booking-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.booking-detail {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 7px 0;
+  font-size: 0.86rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.booking-detail:last-child { border-bottom: none; }
+.booking-detail span { color: var(--text2); }
+.booking-detail strong { color: var(--text); font-weight: 600; }
+.price-gold { color: var(--gold) !important; }
+
+.booking-actions {
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-cancel {
+  padding: 8px 20px;
+  background: transparent;
+  border: 1px solid var(--red);
+  color: var(--red);
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: var(--radius);
+  transition: all 0.15s;
+}
+
+.btn-cancel:hover:not(:disabled) {
+  background: var(--red);
+  color: #fff;
+}
+
+.btn-cancel:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* empty */
+.no-bookings {
+  text-align: center;
+  padding: 5rem 2rem;
+  color: var(--text2);
+}
+
+.no-bookings span {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.no-bookings h3 {
+  font-size: 1.2rem;
+  color: var(--text);
+  margin-bottom: 0.5rem;
+}
+
+/* skeleton */
+.skeleton-card {
+  height: 200px;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(90deg, var(--bg2) 25%, var(--bg3) 50%, var(--bg2) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.page-error {
+  color: var(--red);
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 580px) {
+  .booking-body { grid-template-columns: 1fr; }
+  .booking-route { padding: 0.75rem; }
+}
