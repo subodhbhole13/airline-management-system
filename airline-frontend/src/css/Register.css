@@ -1,142 +1,81 @@
-.register-page {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  background: var(--bg);
-}
+.register-page { min-height: 100vh; background: var(--bg); display: flex; flex-direction: column; }
 
 .register-wrapper {
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2rem 1.5rem;
+  padding: 48px 24px;
 }
 
 .register-card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 2.5rem;
+  border-radius: var(--radius-xl);
+  padding: 48px;
   width: 100%;
   max-width: 520px;
+  position: relative;
+  overflow: hidden;
+}
+
+.register-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-bdr), transparent);
 }
 
 .register-header {
-  margin-bottom: 1.75rem;
+  margin-bottom: 32px;
 }
 
 .register-brand {
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--gold);
+  font-family: var(--font-head);
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--gold2);
   display: block;
-  margin-bottom: 0.75rem;
+  margin-bottom: 20px;
 }
 
 .register-header h2 {
-  font-size: 1.6rem;
-  font-weight: 700;
+  font-family: var(--font-head);
+  font-size: 28px;
+  font-weight: 800;
   color: var(--text);
+  letter-spacing: -0.5px;
+  margin-bottom: 6px;
 }
 
 .register-header p {
+  font-size: 14px;
   color: var(--text2);
-  font-size: 0.9rem;
-  margin-top: 4px;
 }
 
 .register-form {
   display: flex;
   flex-direction: column;
-  gap: 1.1rem;
+  gap: 18px;
 }
 
 .form-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-}
-
-.field {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.field label {
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--text2);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.field input {
-  padding: 11px 14px;
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  color: var(--text);
-  font-size: 0.95rem;
-  outline: none;
-  transition: border-color 0.15s;
-  width: 100%;
-}
-
-.field input:focus {
-  border-color: var(--gold);
-}
-
-.field input::placeholder {
-  color: var(--text3);
-}
-
-.btn-primary {
-  width: 100%;
-  padding: 12px;
-  background: var(--gold);
-  color: #000;
-  font-size: 0.95rem;
-  font-weight: 700;
-  border: none;
-  border-radius: var(--radius);
-  transition: background 0.15s;
-  margin-top: 4px;
-}
-
-.btn-primary:hover {
-  background: var(--gold2);
-}
-
-.btn-primary:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.alert-error {
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.3);
-  color: #f87171;
-  padding: 10px 14px;
-  border-radius: var(--radius);
-  font-size: 0.88rem;
-  margin-bottom: 1rem;
+  gap: 14px;
 }
 
 .register-footer {
   text-align: center;
+  margin-top: 24px;
+  font-size: 14px;
   color: var(--text2);
-  font-size: 0.88rem;
-  margin-top: 1.25rem;
 }
 
 .register-footer a {
-  color: var(--gold);
+  color: var(--gold2);
   font-weight: 600;
 }
 
-@media (max-width: 480px) {
-  .form-row { grid-template-columns: 1fr; }
-  .register-card { padding: 1.75rem; }
-}
+.register-footer a:hover { text-decoration: underline; }

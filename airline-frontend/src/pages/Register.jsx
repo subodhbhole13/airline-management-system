@@ -6,7 +6,6 @@ import '../css/Register.css'
 
 export default function Register() {
   const navigate = useNavigate()
-
   const [form, setForm] = useState({ name: '', email: '', password: '', confirm: '' })
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
@@ -71,7 +70,7 @@ export default function Register() {
               <input
                 type="email"
                 name="email"
-                placeholder="you@example.com"
+                placeholder=""
                 value={form.email}
                 onChange={handleChange}
               />

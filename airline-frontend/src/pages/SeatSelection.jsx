@@ -15,7 +15,6 @@ function generateSeats(totalSeats) {
   for (let r = 1; r <= rows; r++) {
     for (let c of cols) {
       const id = `${r}${c}`
-      // simple deterministic "taken" logic using seat id hash
       const hash = (r * 7 + c.charCodeAt(0) * 13) % 100
       const taken = takenCount < maxTaken && hash < 45
       if (taken) takenCount++
@@ -127,7 +126,6 @@ export default function SeatSelection() {
             })}
           </div>
         </div>
-
         {/* Bottom panel */}
         <div className="seat-summary">
           <div className="summary-info">

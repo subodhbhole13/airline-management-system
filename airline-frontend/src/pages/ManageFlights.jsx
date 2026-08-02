@@ -10,20 +10,21 @@ const EMPTY_FORM = {
   destination: '',
   departureDate: '',
   departureTime: '',
+  arrivalTime: '',    // ✅ added
+  totalSeats: '',     // ✅ renamed from availableSeats
   price: '',
-  availableSeats: '',
   status: 'SCHEDULED',
 }
 
 export default function ManageFlights() {
-  const [flights, setFlights] = useState([])
-  const [loading, setLoading] = useState(true)
+  const [flights, setFlights]     = useState([])
+  const [loading, setLoading]     = useState(true)
   const [showModal, setShowModal] = useState(false)
   const [editFlight, setEditFlight] = useState(null)
-  const [form, setForm] = useState(EMPTY_FORM)
+  const [form, setForm]           = useState(EMPTY_FORM)
   const [submitting, setSubmitting] = useState(false)
-  const [error, setError] = useState('')
-  const [deleteId, setDeleteId] = useState(null)
+  const [error, setError]         = useState('')
+  const [deleteId, setDeleteId]   = useState(null)
 
   const fetchFlights = async () => {
     try {
@@ -36,9 +37,7 @@ export default function ManageFlights() {
     }
   }
 
-  useEffect(() => {
-    fetchFlights()
-  }, [])
+  useEffect(() => { fetchFlights() }, [])
 
   const openAdd = () => {
     setEditFlight(null)
@@ -50,14 +49,15 @@ export default function ManageFlights() {
   const openEdit = (flight) => {
     setEditFlight(flight)
     setForm({
-      flightNumber: flight.flightNumber,
-      origin: flight.origin,
-      destination: flight.destination,
+      flightNumber:  flight.flightNumber,
+      origin:        flight.origin,
+      destination:   flight.destination,
       departureDate: flight.departureDate,
       departureTime: flight.departureTime?.slice(0, 5),
-      price: flight.price,
-      availableSeats: flight.availableSeats,
-      status: flight.status,
+      arrivalTime:   flight.arrivalTime?.slice(0, 5),  // ✅ added
+      totalSeats:    flight.totalSeats,                 // ✅ fixed
+      price:         flight.price,
+      status:        flight.status,
     })
     setError('')
     setShowModal(true)
@@ -71,17 +71,27 @@ export default function ManageFlights() {
     e.preventDefault()
     setError('')
 
-    if (!form.flightNumber || !form.origin || !form.destination || !form.departureDate || !form.departureTime || !form.price || !form.availableSeats) {
+    // ✅ validate all fields including new ones
+    if (!form.flightNumber || !form.origin || !form.destination ||
+        !form.departureDate || !form.departureTime || !form.arrivalTime ||
+        !form.price || !form.totalSeats) {
       setError('All fields are required')
       return
     }
 
     setSubmitting(true)
     try {
+      // ✅ convert strings to numbers before sending
+      const payload = {
+        ...form,
+        totalSeats: Number(form.totalSeats),
+        price:      Number(form.price),
+      }
+
       if (editFlight) {
-        await updateFlight(editFlight.id, form)
+        await updateFlight(editFlight.id, payload)
       } else {
-        await createFlight(form)
+        await createFlight(payload)
       }
       setShowModal(false)
       fetchFlights()
@@ -106,7 +116,9 @@ export default function ManageFlights() {
   }
 
   const formatDate = (d) =>
-    new Date(d).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })
+    new Date(d).toLocaleDateString('en-IN', {
+      day: '2-digit', month: 'short', year: 'numeric'
+    })
 
   return (
     <div className="mf-page">
@@ -135,8 +147,10 @@ export default function ManageFlights() {
                   <th>Flight No.</th>
                   <th>Route</th>
                   <th>Date</th>
-                  <th>Time</th>
-                  <th>Seats</th>
+                  <th>Departure</th>
+                  <th>Arrival</th>
+                  <th>Total Seats</th>
+                  <th>Available</th>
                   <th>Price</th>
                   <th>Status</th>
                   <th>Actions</th>
@@ -149,21 +163,25 @@ export default function ManageFlights() {
                     <td>{f.origin} → {f.destination}</td>
                     <td>{formatDate(f.departureDate)}</td>
                     <td>{f.departureTime?.slice(0, 5)}</td>
+                    <td>{f.arrivalTime?.slice(0, 5)}</td>
+                    <td>{f.totalSeats}</td>
                     <td>{f.availableSeats}</td>
                     <td>₹{f.price?.toLocaleString('en-IN')}</td>
                     <td>
-                      <span className={`badge ${f.status === 'SCHEDULED' ? 'badge-green' : f.status === 'CANCELLED' ? 'badge-red' : 'badge-yellow'}`}>
+                      <span className={`badge ${
+                        f.status === 'SCHEDULED' ? 'badge-green' :
+                        f.status === 'CANCELLED' ? 'badge-red' : 'badge-yellow'
+                      }`}>
                         {f.status}
                       </span>
                     </td>
                     <td>
                       <div className="action-group">
-                        <button className="btn-edit" onClick={() => openEdit(f)}>Edit</button>
-                        <button
-                          className="btn-delete"
+                        <button className="btn-edit"
+                          onClick={() => openEdit(f)}>Edit</button>
+                        <button className="btn-delete"
                           onClick={() => handleDelete(f.id)}
-                          disabled={deleteId === f.id}
-                        >
+                          disabled={deleteId === f.id}>
                           {deleteId === f.id ? '...' : 'Delete'}
                         </button>
                       </div>
@@ -181,16 +199,19 @@ export default function ManageFlights() {
           <div className="modal" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
               <h2>{editFlight ? 'Edit Flight' : 'Add New Flight'}</h2>
-              <button className="modal-close" onClick={() => setShowModal(false)}>✕</button>
+              <button className="modal-close"
+                onClick={() => setShowModal(false)}>✕</button>
             </div>
 
             {error && <div className="alert-error">{error}</div>}
 
             <form onSubmit={handleSubmit} className="flight-form">
+
               <div className="form-row">
                 <div className="field">
                   <label>Flight Number</label>
-                  <input name="flightNumber" placeholder="e.g. AI-303" value={form.flightNumber} onChange={handleChange} />
+                  <input name="flightNumber" placeholder="e.g. AI-303"
+                    value={form.flightNumber} onChange={handleChange} />
                 </div>
                 <div className="field">
                   <label>Status</label>
@@ -205,44 +226,63 @@ export default function ManageFlights() {
               <div className="form-row">
                 <div className="field">
                   <label>Origin</label>
-                  <input name="origin" placeholder="e.g. Mumbai" value={form.origin} onChange={handleChange} />
+                  <input name="origin" placeholder="e.g. Mumbai"
+                    value={form.origin} onChange={handleChange} />
                 </div>
                 <div className="field">
                   <label>Destination</label>
-                  <input name="destination" placeholder="e.g. Delhi" value={form.destination} onChange={handleChange} />
+                  <input name="destination" placeholder="e.g. Delhi"
+                    value={form.destination} onChange={handleChange} />
                 </div>
               </div>
 
               <div className="form-row">
                 <div className="field">
                   <label>Departure Date</label>
-                  <input type="date" name="departureDate" value={form.departureDate} onChange={handleChange} />
+                  <input type="date" name="departureDate"
+                    value={form.departureDate} onChange={handleChange} />
                 </div>
                 <div className="field">
                   <label>Departure Time</label>
-                  <input type="time" name="departureTime" value={form.departureTime} onChange={handleChange} />
+                  <input type="time" name="departureTime"
+                    value={form.departureTime} onChange={handleChange} />
+                </div>
+              </div>
+
+              
+              <div className="form-row">
+                <div className="field">
+                  <label>Arrival Time</label>
+                  <input type="time" name="arrivalTime"
+                    value={form.arrivalTime} onChange={handleChange} />
+                </div>
+                <div className="field">
+                  <label>Total Seats</label>
+                  <input type="number" name="totalSeats"
+                    placeholder="e.g. 180"
+                    value={form.totalSeats} onChange={handleChange} />
                 </div>
               </div>
 
               <div className="form-row">
                 <div className="field">
                   <label>Price (₹)</label>
-                  <input type="number" name="price" placeholder="e.g. 4999" value={form.price} onChange={handleChange} />
-                </div>
-                <div className="field">
-                  <label>Available Seats</label>
-                  <input type="number" name="availableSeats" placeholder="e.g. 150" value={form.availableSeats} onChange={handleChange} />
+                  <input type="number" name="price"
+                    placeholder="e.g. 4999"
+                    value={form.price} onChange={handleChange} />
                 </div>
               </div>
 
               <div className="modal-footer">
-                <button type="button" className="btn-cancel-modal" onClick={() => setShowModal(false)}>
+                <button type="button" className="btn-cancel-modal"
+                  onClick={() => setShowModal(false)}>
                   Cancel
                 </button>
                 <button type="submit" className="btn-save" disabled={submitting}>
                   {submitting ? 'Saving...' : editFlight ? 'Save Changes' : 'Add Flight'}
                 </button>
               </div>
+
             </form>
           </div>
         </div>

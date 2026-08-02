@@ -10,11 +10,13 @@ export function AuthProvider({ children }) {
 
   const login = (userData) => {
     localStorage.setItem('skynex_user', JSON.stringify(userData))
+    localStorage.setItem('token', userData.token)  // ✅ save token separately
     setUser(userData)
   }
 
   const logout = () => {
     localStorage.removeItem('skynex_user')
+    localStorage.removeItem('token')               // ✅ clear token on logout
     setUser(null)
   }
 
